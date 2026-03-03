@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using GtMotive.Estimate.Microservice.Domain;
 using GtMotive.Estimate.Microservice.Domain.Interfaces;
 using Microsoft.AspNetCore.Http;
@@ -17,7 +17,23 @@ namespace GtMotive.Estimate.Microservice.Api.Filters
 
             _appLogger.LogError(context.Exception, "Exception captured in BusinessExceptionFilter.");
 
-            if (context.Exception is DomainException)
+            if (context.Exception is NotFoundException notFoundException)
+            {
+                var problemDetails = new ProblemDetails
+                {
+                    Type = "https://tools.ietf.org/html/rfc7231#section-6.5.4",
+                    Status = StatusCodes.Status404NotFound,
+                    Title = "Not Found",
+                    Detail = notFoundException.Message,
+                    Instance = context.HttpContext.Request.Path,
+                };
+
+                _appLogger.LogWarning("Not Found: {detail}", problemDetails.Detail);
+
+                context.Result = new NotFoundObjectResult(problemDetails);
+                context.Exception = null;
+            }
+            else if (context.Exception is DomainException)
             {
                 var problemDetails = new ProblemDetails
                 {
