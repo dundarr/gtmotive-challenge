@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Threading.Tasks;
 using GtMotive.Estimate.Microservice.Api.Models;
 using GtMotive.Estimate.Microservice.Api.Presenters.CreateCar;
@@ -6,6 +6,7 @@ using GtMotive.Estimate.Microservice.Api.Presenters.GetCars;
 using GtMotive.Estimate.Microservice.ApplicationCore.UseCases;
 using GtMotive.Estimate.Microservice.ApplicationCore.UseCases.CreateCar;
 using GtMotive.Estimate.Microservice.ApplicationCore.UseCases.GetCars;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -16,6 +17,7 @@ namespace GtMotive.Estimate.Microservice.Api.Controllers
     /// </summary>
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize]
 #pragma warning disable S6960 // Controller has multiple responsibilities - GET and POST for same resource is standard REST
     public class CarController : ControllerBase
 #pragma warning restore S6960
