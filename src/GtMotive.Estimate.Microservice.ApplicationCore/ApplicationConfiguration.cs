@@ -4,6 +4,7 @@ using GtMotive.Estimate.Microservice.ApplicationCore.UseCases;
 using GtMotive.Estimate.Microservice.ApplicationCore.UseCases.CreateFleet;
 using GtMotive.Estimate.Microservice.ApplicationCore.UseCases.GetAvailableFleets;
 using GtMotive.Estimate.Microservice.ApplicationCore.UseCases.GetFleets;
+using GtMotive.Estimate.Microservice.ApplicationCore.UseCases.GetRentStatus;
 using GtMotive.Estimate.Microservice.ApplicationCore.UseCases.RentFleet;
 using GtMotive.Estimate.Microservice.ApplicationCore.UseCases.ReturnFleet;
 using Microsoft.Extensions.DependencyInjection;
@@ -28,6 +29,7 @@ namespace GtMotive.Estimate.Microservice.ApplicationCore
             services.AddScoped<IUseCase<CreateFleetInput>, CreateFleetUseCase>();
             services.AddScoped<IUseCase<GetAvailableFleetsInput>, GetAvailableFleetsUseCase>();
             services.AddScoped<IUseCase<GetFleetsInput>, GetFleetsUseCase>();
+            services.AddScoped<IUseCase<GetRentStatusInput>, GetRentStatusUseCase>();
             services.AddScoped<IUseCase<RentFleetInput>, RentFleetUseCase>();
             services.AddScoped<IUseCase<ReturnFleetInput>, ReturnFleetUseCase>();
             return services;
