@@ -1,4 +1,8 @@
-﻿using System.Collections.Generic;
+// <copyright file="ITelemetry.cs" company="GtMotive">
+//   Copyright (c) GtMotive. All rights reserved.
+// </copyright>
+
+using System.Collections.Generic;
 
 namespace GtMotive.Estimate.Microservice.Domain.Interfaces
 {

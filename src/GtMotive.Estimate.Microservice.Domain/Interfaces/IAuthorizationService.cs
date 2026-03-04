@@ -1,4 +1,8 @@
-﻿using System.Security.Claims;
+// <copyright file="IAuthorizationService.cs" company="GtMotive">
+//   Copyright (c) GtMotive. All rights reserved.
+// </copyright>
+
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace GtMotive.Estimate.Microservice.Domain.Interfaces

@@ -1,3 +1,7 @@
+// <copyright file="IRentalRepository.cs" company="GtMotive">
+//   Copyright (c) GtMotive. All rights reserved.
+// </copyright>
+
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using GtMotive.Estimate.Microservice.Domain.Entities;

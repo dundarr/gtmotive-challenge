@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
@@ -18,18 +18,13 @@ namespace GtMotive.Estimate.Microservice.Api.Controllers
     [ApiController]
     [Route("connect")]
     [AllowAnonymous]
-    public class LocalAuthController : ControllerBase
+    public class LocalAuthController(IConfiguration config) : ControllerBase
     {
         private const string LocalClientId = "client-gtestimate-swagger";
         private const string LocalClientSecret = "gtmotive";
         private const string ClientCredentialsGrantType = "client_credentials";
 
-        private readonly IConfiguration _config;
-
-        public LocalAuthController(IConfiguration config)
-        {
-            _config = config ?? throw new ArgumentNullException(nameof(config));
-        }
+        private readonly IConfiguration _config = config ?? throw new ArgumentNullException(nameof(config));
 
         /// <summary>
         /// Local token endpoint (emulates /connect/token). Accepts OAuth2 client credentials grant.

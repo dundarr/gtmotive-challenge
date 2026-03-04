@@ -1,4 +1,4 @@
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using GtMotive.Estimate.Microservice.Api.Presenters.ReturnFleet;
 using GtMotive.Estimate.Microservice.ApplicationCore.UseCases;
 using GtMotive.Estimate.Microservice.ApplicationCore.UseCases.ReturnFleet;
@@ -11,26 +11,20 @@ namespace GtMotive.Estimate.Microservice.Api.Controllers
     /// <summary>
     /// Controller for returning a rented fleet vehicle.
     /// </summary>
+    /// <remarks>
+    /// Initializes a new instance of the <see cref="ReturnController"/> class.
+    /// </remarks>
+    /// <param name="returnFleetUseCase">The return fleet use case.</param>
+    /// <param name="returnFleetPresenter">The return fleet presenter.</param>
     [ApiController]
     [Route("api/[controller]")]
     [Authorize]
-    public class ReturnController : ControllerBase
+    public class ReturnController(
+        IUseCase<ReturnFleetInput> returnFleetUseCase,
+        ReturnFleetPresenter returnFleetPresenter) : ControllerBase
     {
-        private readonly IUseCase<ReturnFleetInput> _returnFleetUseCase;
-        private readonly ReturnFleetPresenter _returnFleetPresenter;
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ReturnController"/> class.
-        /// </summary>
-        /// <param name="returnFleetUseCase">The return fleet use case.</param>
-        /// <param name="returnFleetPresenter">The return fleet presenter.</param>
-        public ReturnController(
-            IUseCase<ReturnFleetInput> returnFleetUseCase,
-            ReturnFleetPresenter returnFleetPresenter)
-        {
-            _returnFleetUseCase = returnFleetUseCase;
-            _returnFleetPresenter = returnFleetPresenter;
-        }
+        private readonly IUseCase<ReturnFleetInput> _returnFleetUseCase = returnFleetUseCase;
+        private readonly ReturnFleetPresenter _returnFleetPresenter = returnFleetPresenter;
 
         /// <summary>
         /// Returns the specified fleet vehicle. Only the rent status for this fleet car is updated; the vehicle is no longer in "rented" status.

@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -9,30 +9,23 @@ namespace GtMotive.Estimate.Microservice.ApplicationCore.UseCases.GetRentStatus
     /// <summary>
     /// Use case for getting all fleet vehicles with their car data and rent status.
     /// </summary>
-    public class GetRentStatusUseCase : IUseCase<GetRentStatusInput>
+    /// <remarks>
+    /// Initializes a new instance of the <see cref="GetRentStatusUseCase"/> class.
+    /// </remarks>
+    /// <param name="fleetRepository">The fleet repository.</param>
+    /// <param name="rentalRepository">The rental repository.</param>
+    /// <param name="outputPort">The output port.</param>
+    public class GetRentStatusUseCase(
+        IFleetRepository fleetRepository,
+        IRentalRepository rentalRepository,
+        IOutputPortStandard<GetRentStatusOutput> outputPort) : IUseCase<GetRentStatusInput>
     {
         private const string AvailableStatus = "Available";
         private const string RentedStatus = "Rented";
 
-        private readonly IFleetRepository _fleetRepository;
-        private readonly IRentalRepository _rentalRepository;
-        private readonly IOutputPortStandard<GetRentStatusOutput> _outputPort;
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="GetRentStatusUseCase"/> class.
-        /// </summary>
-        /// <param name="fleetRepository">The fleet repository.</param>
-        /// <param name="rentalRepository">The rental repository.</param>
-        /// <param name="outputPort">The output port.</param>
-        public GetRentStatusUseCase(
-            IFleetRepository fleetRepository,
-            IRentalRepository rentalRepository,
-            IOutputPortStandard<GetRentStatusOutput> outputPort)
-        {
-            _fleetRepository = fleetRepository;
-            _rentalRepository = rentalRepository;
-            _outputPort = outputPort;
-        }
+        private readonly IFleetRepository _fleetRepository = fleetRepository;
+        private readonly IRentalRepository _rentalRepository = rentalRepository;
+        private readonly IOutputPortStandard<GetRentStatusOutput> _outputPort = outputPort;
 
         /// <inheritdoc/>
         public async Task Execute(GetRentStatusInput input)

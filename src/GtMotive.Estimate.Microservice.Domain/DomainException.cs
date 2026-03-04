@@ -1,7 +1,11 @@
+// <copyright file="DomainException.cs" company="GtMotive">
+//   Copyright (c) GtMotive. All rights reserved.
+// </copyright>
+
 using System;
 using System.Diagnostics.CodeAnalysis;
 
-[assembly: CLSCompliant(false)]
+[assembly: System.CLSCompliant(false)]
 
 namespace GtMotive.Estimate.Microservice.Domain
 {

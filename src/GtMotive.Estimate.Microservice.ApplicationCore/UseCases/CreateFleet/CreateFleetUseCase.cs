@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Threading.Tasks;
 using GtMotive.Estimate.Microservice.Domain;
 using GtMotive.Estimate.Microservice.Domain.Entities;
@@ -9,29 +9,22 @@ namespace GtMotive.Estimate.Microservice.ApplicationCore.UseCases.CreateFleet
     /// <summary>
     /// Use case for creating a new fleet vehicle.
     /// </summary>
-    public class CreateFleetUseCase : IUseCase<CreateFleetInput>
+    /// <remarks>
+    /// Initializes a new instance of the <see cref="CreateFleetUseCase"/> class.
+    /// </remarks>
+    /// <param name="fleetRepository">The fleet repository.</param>
+    /// <param name="unitOfWork">The unit of work.</param>
+    /// <param name="outputPort">The output port.</param>
+    public class CreateFleetUseCase(
+        IFleetRepository fleetRepository,
+        IUnitOfWork unitOfWork,
+        IOutputPortStandard<CreateFleetOutput> outputPort) : IUseCase<CreateFleetInput>
     {
         private const int MaxManufactureAgeYears = 5;
 
-        private readonly IFleetRepository _fleetRepository;
-        private readonly IUnitOfWork _unitOfWork;
-        private readonly IOutputPortStandard<CreateFleetOutput> _outputPort;
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="CreateFleetUseCase"/> class.
-        /// </summary>
-        /// <param name="fleetRepository">The fleet repository.</param>
-        /// <param name="unitOfWork">The unit of work.</param>
-        /// <param name="outputPort">The output port.</param>
-        public CreateFleetUseCase(
-            IFleetRepository fleetRepository,
-            IUnitOfWork unitOfWork,
-            IOutputPortStandard<CreateFleetOutput> outputPort)
-        {
-            _fleetRepository = fleetRepository;
-            _unitOfWork = unitOfWork;
-            _outputPort = outputPort;
-        }
+        private readonly IFleetRepository _fleetRepository = fleetRepository;
+        private readonly IUnitOfWork _unitOfWork = unitOfWork;
+        private readonly IOutputPortStandard<CreateFleetOutput> _outputPort = outputPort;
 
         /// <inheritdoc/>
         public async Task Execute(CreateFleetInput input)

@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Threading.Tasks;
 using GtMotive.Estimate.Microservice.Domain;
 using GtMotive.Estimate.Microservice.Domain.Entities;
@@ -9,33 +9,25 @@ namespace GtMotive.Estimate.Microservice.ApplicationCore.UseCases.RentFleet
     /// <summary>
     /// Use case for renting a fleet vehicle. Only one active rental per user is allowed.
     /// </summary>
-    public class RentFleetUseCase : IUseCase<RentFleetInput>
+    /// <remarks>
+    /// Initializes a new instance of the <see cref="RentFleetUseCase"/> class.
+    /// </remarks>
+    /// <param name="fleetRepository">The fleet repository.</param>
+    /// <param name="rentalRepository">The rental repository.</param>
+    /// <param name="unitOfWork">The unit of work.</param>
+    /// <param name="outputPort">The output port.</param>
+    public class RentFleetUseCase(
+        IFleetRepository fleetRepository,
+        IRentalRepository rentalRepository,
+        IUnitOfWork unitOfWork,
+        IOutputPortStandard<RentFleetOutput> outputPort) : IUseCase<RentFleetInput>
     {
         private const string MoreThanOneRentalMessage = "Not allowed more than 1 rental.";
 
-        private readonly IFleetRepository _fleetRepository;
-        private readonly IRentalRepository _rentalRepository;
-        private readonly IUnitOfWork _unitOfWork;
-        private readonly IOutputPortStandard<RentFleetOutput> _outputPort;
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="RentFleetUseCase"/> class.
-        /// </summary>
-        /// <param name="fleetRepository">The fleet repository.</param>
-        /// <param name="rentalRepository">The rental repository.</param>
-        /// <param name="unitOfWork">The unit of work.</param>
-        /// <param name="outputPort">The output port.</param>
-        public RentFleetUseCase(
-            IFleetRepository fleetRepository,
-            IRentalRepository rentalRepository,
-            IUnitOfWork unitOfWork,
-            IOutputPortStandard<RentFleetOutput> outputPort)
-        {
-            _fleetRepository = fleetRepository;
-            _rentalRepository = rentalRepository;
-            _unitOfWork = unitOfWork;
-            _outputPort = outputPort;
-        }
+        private readonly IFleetRepository _fleetRepository = fleetRepository;
+        private readonly IRentalRepository _rentalRepository = rentalRepository;
+        private readonly IUnitOfWork _unitOfWork = unitOfWork;
+        private readonly IOutputPortStandard<RentFleetOutput> _outputPort = outputPort;
 
         /// <inheritdoc/>
         public async Task Execute(RentFleetInput input)

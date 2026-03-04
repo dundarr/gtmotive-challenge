@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -9,29 +9,22 @@ namespace GtMotive.Estimate.Microservice.ApplicationCore.UseCases.GetAvailableFl
     /// <summary>
     /// Use case for getting the list of fleet vehicles that are available (not in rented status).
     /// </summary>
-    public class GetAvailableFleetsUseCase : IUseCase<GetAvailableFleetsInput>
+    /// <remarks>
+    /// Initializes a new instance of the <see cref="GetAvailableFleetsUseCase"/> class.
+    /// </remarks>
+    /// <param name="fleetRepository">The fleet repository.</param>
+    /// <param name="rentalRepository">The rental repository.</param>
+    /// <param name="outputPort">The output port.</param>
+    public class GetAvailableFleetsUseCase(
+        IFleetRepository fleetRepository,
+        IRentalRepository rentalRepository,
+        IOutputPortStandard<GetAvailableFleetsOutput> outputPort) : IUseCase<GetAvailableFleetsInput>
     {
         private const string AvailableStatus = "Available";
 
-        private readonly IFleetRepository _fleetRepository;
-        private readonly IRentalRepository _rentalRepository;
-        private readonly IOutputPortStandard<GetAvailableFleetsOutput> _outputPort;
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="GetAvailableFleetsUseCase"/> class.
-        /// </summary>
-        /// <param name="fleetRepository">The fleet repository.</param>
-        /// <param name="rentalRepository">The rental repository.</param>
-        /// <param name="outputPort">The output port.</param>
-        public GetAvailableFleetsUseCase(
-            IFleetRepository fleetRepository,
-            IRentalRepository rentalRepository,
-            IOutputPortStandard<GetAvailableFleetsOutput> outputPort)
-        {
-            _fleetRepository = fleetRepository;
-            _rentalRepository = rentalRepository;
-            _outputPort = outputPort;
-        }
+        private readonly IFleetRepository _fleetRepository = fleetRepository;
+        private readonly IRentalRepository _rentalRepository = rentalRepository;
+        private readonly IOutputPortStandard<GetAvailableFleetsOutput> _outputPort = outputPort;
 
         /// <inheritdoc/>
         public async Task Execute(GetAvailableFleetsInput input)

@@ -1,4 +1,8 @@
-﻿using System.Threading.Tasks;
+// <copyright file="IBus.cs" company="GtMotive">
+//   Copyright (c) GtMotive. All rights reserved.
+// </copyright>
+
+using System.Threading.Tasks;
 
 namespace GtMotive.Estimate.Microservice.Domain.Interfaces
 {

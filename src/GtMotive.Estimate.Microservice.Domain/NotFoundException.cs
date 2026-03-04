@@ -1,3 +1,7 @@
+// <copyright file="NotFoundException.cs" company="GtMotive">
+//   Copyright (c) GtMotive. All rights reserved.
+// </copyright>
+
 using System;
 using System.Diagnostics.CodeAnalysis;
 

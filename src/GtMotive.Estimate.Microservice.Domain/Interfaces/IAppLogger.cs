@@ -1,4 +1,8 @@
-﻿using System;
+// <copyright file="IAppLogger.cs" company="GtMotive">
+//   Copyright (c) GtMotive. All rights reserved.
+// </copyright>
+
+using System;
 
 namespace GtMotive.Estimate.Microservice.Domain.Interfaces
 {

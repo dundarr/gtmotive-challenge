@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Threading.Tasks;
 using GtMotive.Estimate.Microservice.Domain;
 using GtMotive.Estimate.Microservice.Domain.Interfaces;
@@ -8,27 +8,20 @@ namespace GtMotive.Estimate.Microservice.ApplicationCore.UseCases.ReturnFleet
     /// <summary>
     /// Use case for returning a rented fleet vehicle. Marks the rental as returned so the fleet vehicle is no longer in "rented" status.
     /// </summary>
-    public class ReturnFleetUseCase : IUseCase<ReturnFleetInput>
+    /// <remarks>
+    /// Initializes a new instance of the <see cref="ReturnFleetUseCase"/> class.
+    /// </remarks>
+    /// <param name="rentalRepository">The rental repository.</param>
+    /// <param name="unitOfWork">The unit of work.</param>
+    /// <param name="outputPort">The output port.</param>
+    public class ReturnFleetUseCase(
+        IRentalRepository rentalRepository,
+        IUnitOfWork unitOfWork,
+        IOutputPortStandard<ReturnFleetOutput> outputPort) : IUseCase<ReturnFleetInput>
     {
-        private readonly IRentalRepository _rentalRepository;
-        private readonly IUnitOfWork _unitOfWork;
-        private readonly IOutputPortStandard<ReturnFleetOutput> _outputPort;
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ReturnFleetUseCase"/> class.
-        /// </summary>
-        /// <param name="rentalRepository">The rental repository.</param>
-        /// <param name="unitOfWork">The unit of work.</param>
-        /// <param name="outputPort">The output port.</param>
-        public ReturnFleetUseCase(
-            IRentalRepository rentalRepository,
-            IUnitOfWork unitOfWork,
-            IOutputPortStandard<ReturnFleetOutput> outputPort)
-        {
-            _rentalRepository = rentalRepository;
-            _unitOfWork = unitOfWork;
-            _outputPort = outputPort;
-        }
+        private readonly IRentalRepository _rentalRepository = rentalRepository;
+        private readonly IUnitOfWork _unitOfWork = unitOfWork;
+        private readonly IOutputPortStandard<ReturnFleetOutput> _outputPort = outputPort;
 
         /// <inheritdoc/>
         public async Task Execute(ReturnFleetInput input)

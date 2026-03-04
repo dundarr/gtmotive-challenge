@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Threading.Tasks;
 using GtMotive.Estimate.Microservice.Api.Handlers.GetRentStatus;
 using GtMotive.Estimate.Microservice.Api.Models;
@@ -18,48 +18,37 @@ namespace GtMotive.Estimate.Microservice.Api.Controllers
     /// <summary>
     /// Controller for fleet operations.
     /// </summary>
+    /// <remarks>
+    /// Initializes a new instance of the <see cref="FleetController"/> class.
+    /// </remarks>
+    /// <param name="createFleetUseCase">The create fleet use case.</param>
+    /// <param name="createFleetPresenter">The create fleet presenter.</param>
+    /// <param name="getAvailableFleetsUseCase">The get available fleets use case.</param>
+    /// <param name="getAvailableFleetsPresenter">The get available fleets presenter.</param>
+    /// <param name="getFleetsUseCase">The get fleets use case.</param>
+    /// <param name="getFleetsPresenter">The get fleets presenter.</param>
+    /// <param name="getRentStatusHandler">The get rent status handler.</param>
     [ApiController]
     [Route("api/[controller]")]
     [Authorize]
 #pragma warning disable S6960 // Controller has multiple responsibilities - GET and POST for same resource is standard REST
-    public class FleetController : ControllerBase
+    public class FleetController(
+        IUseCase<CreateFleetInput> createFleetUseCase,
+        CreateFleetPresenter createFleetPresenter,
+        IUseCase<GetAvailableFleetsInput> getAvailableFleetsUseCase,
+        GetAvailableFleetsPresenter getAvailableFleetsPresenter,
+        IUseCase<GetFleetsInput> getFleetsUseCase,
+        GetFleetsPresenter getFleetsPresenter,
+        IGetRentStatusHandler getRentStatusHandler) : ControllerBase
 #pragma warning restore S6960
     {
-        private readonly IUseCase<CreateFleetInput> _createFleetUseCase;
-        private readonly CreateFleetPresenter _createFleetPresenter;
-        private readonly IUseCase<GetAvailableFleetsInput> _getAvailableFleetsUseCase;
-        private readonly GetAvailableFleetsPresenter _getAvailableFleetsPresenter;
-        private readonly IUseCase<GetFleetsInput> _getFleetsUseCase;
-        private readonly GetFleetsPresenter _getFleetsPresenter;
-        private readonly IGetRentStatusHandler _getRentStatusHandler;
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="FleetController"/> class.
-        /// </summary>
-        /// <param name="createFleetUseCase">The create fleet use case.</param>
-        /// <param name="createFleetPresenter">The create fleet presenter.</param>
-        /// <param name="getAvailableFleetsUseCase">The get available fleets use case.</param>
-        /// <param name="getAvailableFleetsPresenter">The get available fleets presenter.</param>
-        /// <param name="getFleetsUseCase">The get fleets use case.</param>
-        /// <param name="getFleetsPresenter">The get fleets presenter.</param>
-        /// <param name="getRentStatusHandler">The get rent status handler.</param>
-        public FleetController(
-            IUseCase<CreateFleetInput> createFleetUseCase,
-            CreateFleetPresenter createFleetPresenter,
-            IUseCase<GetAvailableFleetsInput> getAvailableFleetsUseCase,
-            GetAvailableFleetsPresenter getAvailableFleetsPresenter,
-            IUseCase<GetFleetsInput> getFleetsUseCase,
-            GetFleetsPresenter getFleetsPresenter,
-            IGetRentStatusHandler getRentStatusHandler)
-        {
-            _createFleetUseCase = createFleetUseCase;
-            _createFleetPresenter = createFleetPresenter;
-            _getAvailableFleetsUseCase = getAvailableFleetsUseCase;
-            _getAvailableFleetsPresenter = getAvailableFleetsPresenter;
-            _getFleetsUseCase = getFleetsUseCase;
-            _getFleetsPresenter = getFleetsPresenter;
-            _getRentStatusHandler = getRentStatusHandler;
-        }
+        private readonly IUseCase<CreateFleetInput> _createFleetUseCase = createFleetUseCase;
+        private readonly CreateFleetPresenter _createFleetPresenter = createFleetPresenter;
+        private readonly IUseCase<GetAvailableFleetsInput> _getAvailableFleetsUseCase = getAvailableFleetsUseCase;
+        private readonly GetAvailableFleetsPresenter _getAvailableFleetsPresenter = getAvailableFleetsPresenter;
+        private readonly IUseCase<GetFleetsInput> _getFleetsUseCase = getFleetsUseCase;
+        private readonly GetFleetsPresenter _getFleetsPresenter = getFleetsPresenter;
+        private readonly IGetRentStatusHandler _getRentStatusHandler = getRentStatusHandler;
 
         /// <summary>
         /// Creates a new fleet vehicle.

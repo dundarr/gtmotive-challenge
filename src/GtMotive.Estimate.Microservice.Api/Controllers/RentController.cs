@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using GtMotive.Estimate.Microservice.Api.Models;
@@ -14,26 +14,20 @@ namespace GtMotive.Estimate.Microservice.Api.Controllers
     /// <summary>
     /// Controller for renting a fleet vehicle.
     /// </summary>
+    /// <remarks>
+    /// Initializes a new instance of the <see cref="RentController"/> class.
+    /// </remarks>
+    /// <param name="rentFleetUseCase">The rent fleet use case.</param>
+    /// <param name="rentFleetPresenter">The rent fleet presenter.</param>
     [ApiController]
     [Route("api/[controller]")]
     [Authorize]
-    public class RentController : ControllerBase
+    public class RentController(
+        IUseCase<RentFleetInput> rentFleetUseCase,
+        RentFleetPresenter rentFleetPresenter) : ControllerBase
     {
-        private readonly IUseCase<RentFleetInput> _rentFleetUseCase;
-        private readonly RentFleetPresenter _rentFleetPresenter;
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="RentController"/> class.
-        /// </summary>
-        /// <param name="rentFleetUseCase">The rent fleet use case.</param>
-        /// <param name="rentFleetPresenter">The rent fleet presenter.</param>
-        public RentController(
-            IUseCase<RentFleetInput> rentFleetUseCase,
-            RentFleetPresenter rentFleetPresenter)
-        {
-            _rentFleetUseCase = rentFleetUseCase;
-            _rentFleetPresenter = rentFleetPresenter;
-        }
+        private readonly IUseCase<RentFleetInput> _rentFleetUseCase = rentFleetUseCase;
+        private readonly RentFleetPresenter _rentFleetPresenter = rentFleetPresenter;
 
         /// <summary>
         /// Rents a fleet vehicle. Only one fleet vehicle per person is allowed. User id is taken from the JWT token.
