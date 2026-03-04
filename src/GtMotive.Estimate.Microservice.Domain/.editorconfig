@@ -2,3 +2,6 @@
 
 dotnet_diagnostic.SA1600.severity = error
 dotnet_diagnostic.SA1601.severity = error
+dotnet_diagnostic.SA1636.severity = none
+dotnet_diagnostic.SA1512.severity = none
+dotnet_diagnostic.SA1200.severity = none

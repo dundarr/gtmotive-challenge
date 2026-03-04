@@ -1,0 +1,48 @@
+services:
+  estimate-api:
+    build:
+      context: .
+      dockerfile: src/GtMotive.Estimate.Microservice.Host/Dockerfile
+      # Pass PersonalAccessToken if your NuGet restore uses a private feed:
+      # args:
+      #   PersonalAccessToken: ${PersonalAccessToken}
+    container_name: "estimate-api"
+    ports:
+      - "14602:14602"
+    environment:
+      MongoDb__ConnectionString: "mongodb://admin:admin@mongodb:27017"
+      MongoDb__MongoDbDatabaseName: "gtmotive"
+      ASPNETCORE_ENVIRONMENT: "Development"
+      ASPNETCORE_URLS: "http://+:14602"
+      AppSettings__LocalAuthTokenUrl: "http://localhost:14602/connect/token"
+    depends_on:
+      mongodb:
+        condition: service_healthy
+    networks:
+      - app
+
+  mongodb:
+    image: mongo:7
+    container_name: "mongodb"
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: admin
+    volumes:
+      - mongodb_data:/data/db
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    networks:
+      - app
+
+networks:
+  app:
+    driver: bridge
+
+volumes:
+  mongodb_data:
