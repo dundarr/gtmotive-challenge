@@ -4,8 +4,7 @@
 
 FROM mcr.microsoft.com/dotnet/aspnet:9.0.0-noble-amd64 AS base
 WORKDIR /app
-EXPOSE 80
-EXPOSE 443
+EXPOSE 14602
 
 FROM mcr.microsoft.com/dotnet/sdk:9.0.100-noble-amd64 AS build
 ARG PersonalAccessToken
@@ -43,4 +42,9 @@ RUN dotnet publish "GtMotive.Estimate.Microservice.Host.csproj" -c Release -o /a
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
+ENV ASPNETCORE_ENVIRONMENT="Development"
+ENV ASPNETCORE_URLS="http://+:14602"
+# Default for standalone run (e.g. docker run). Use host.docker.internal to reach Mongo on host (e.g. mongodb-vs with -p 27017:27017). Overridden by docker-compose to mongodb:27017.
+ENV MongoDb__ConnectionString="mongodb://admin:admin@host.docker.internal:27017"
+ENV AppSettings__LocalAuthTokenUrl="http://localhost:14602/connect/token"
 ENTRYPOINT ["dotnet", "GtMotive.Estimate.Microservice.Host.dll"]

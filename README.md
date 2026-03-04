@@ -8,11 +8,12 @@ The API depends on **MongoDB**. When running from Visual Studio you must have Mo
 
 1. **Start MongoDB** (e.g. with Docker):
 
+    
    ```bash
-   docker run -d --name mongodb -p 27017:27017 -e MONGO_INITDB_ROOT_USERNAME=admin -e MONGO_INITDB_ROOT_PASSWORD=admin mongo:7
+   docker run -d --name mongodb-vs -p 27017:27017 -e MONGO_INITDB_ROOT_USERNAME=admin -e MONGO_INITDB_ROOT_PASSWORD=admin mongo:7
    ```
 
-   Development settings expect: `mongodb://admin:admin@localhost:27017` (see `src/GtMotive.Estimate.Microservice.Host/appsettings.Development.json`).
+   Development settings expect: `mongodb://admin:admin@localhost:27017` (see `src/GtMotive.Estimate.Microservice.Host/appsettings.Development.json`) or if you are using Docker from Visual Studio launch profiles, `mongodb://admin:admin@host.docker.internal:27017`
 
 2. **Run the application** in either way:
 
