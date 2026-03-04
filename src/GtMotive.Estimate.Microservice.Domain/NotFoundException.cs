@@ -8,7 +8,7 @@ using System.Diagnostics.CodeAnalysis;
 namespace GtMotive.Estimate.Microservice.Domain
 {
     /// <summary>
-    /// Exception thrown when a requested resource is not found (e.g. fleet or active rental).
+    /// Exception thrown when a requested resource is not found (e.g. car or active rental).
     /// </summary>
     [ExcludeFromCodeCoverage]
     public class NotFoundException : Exception

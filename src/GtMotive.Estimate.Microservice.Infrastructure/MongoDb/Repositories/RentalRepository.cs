@@ -40,7 +40,7 @@ namespace GtMotive.Estimate.Microservice.Infrastructure.MongoDb.Repositories
             var document = new RentalDocument
             {
                 UserId = rental.UserId,
-                FleetId = rental.FleetId,
+                CarId = rental.CarId,
                 RentedAt = rental.RentedAt,
                 ReturnedAt = rental.ReturnedAt,
             };
@@ -60,23 +60,23 @@ namespace GtMotive.Estimate.Microservice.Infrastructure.MongoDb.Repositories
         }
 
         /// <inheritdoc/>
-        public async Task<Rental> GetActiveByFleetIdAsync(string fleetId)
+        public async Task<Rental> GetActiveByCarIdAsync(string carId)
         {
             var document = await _collection
-                .Find(d => d.FleetId == fleetId && d.ReturnedAt == null)
+                .Find(d => d.CarId == carId && d.ReturnedAt == null)
                 .FirstOrDefaultAsync();
             return document == null ? null : MapToRental(document);
         }
 
         /// <inheritdoc/>
-        public async Task<IReadOnlyList<string>> GetActiveRentedFleetIdsAsync()
+        public async Task<IReadOnlyList<string>> GetActiveRentedCarIdsAsync()
         {
             var filter = Builders<RentalDocument>.Filter.Eq(d => d.ReturnedAt, null);
-            var fleetIds = await _collection
+            var carIds = await _collection
                 .Find(filter)
-                .Project(d => d.FleetId)
+                .Project(d => d.CarId)
                 .ToListAsync();
-            return fleetIds;
+            return carIds;
         }
 
         /// <inheritdoc/>
@@ -95,7 +95,7 @@ namespace GtMotive.Estimate.Microservice.Infrastructure.MongoDb.Repositories
             {
                 Id = doc.Id,
                 UserId = doc.UserId,
-                FleetId = doc.FleetId,
+                CarId = doc.CarId,
                 RentedAt = doc.RentedAt,
                 ReturnedAt = doc.ReturnedAt,
             };

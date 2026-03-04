@@ -4,31 +4,30 @@ using System.Linq;
 using System.Threading.Tasks;
 using GtMotive.Estimate.Microservice.Domain.Interfaces;
 
-namespace GtMotive.Estimate.Microservice.ApplicationCore.UseCases.GetRentStatus
+namespace GtMotive.Estimate.Microservice.ApplicationCore.UseCases.GetAvailableCars
 {
     /// <summary>
-    /// Use case for getting all cars with their car data and rent status.
+    /// Use case for getting the list of cars that are available (not in rented status).
     /// </summary>
     /// <remarks>
-    /// Initializes a new instance of the <see cref="GetRentStatusUseCase"/> class.
+    /// Initializes a new instance of the <see cref="GetAvailableCarsUseCase"/> class.
     /// </remarks>
     /// <param name="carRepository">The car repository.</param>
     /// <param name="rentalRepository">The rental repository.</param>
     /// <param name="outputPort">The output port.</param>
-    public class GetRentStatusUseCase(
+    public class GetAvailableCarsUseCase(
         ICarRepository carRepository,
         IRentalRepository rentalRepository,
-        IOutputPortStandard<GetRentStatusOutput> outputPort) : IUseCase<GetRentStatusInput>
+        IOutputPortStandard<GetAvailableCarsOutput> outputPort) : IUseCase<GetAvailableCarsInput>
     {
         private const string AvailableStatus = "Available";
-        private const string RentedStatus = "Rented";
 
         private readonly ICarRepository _carRepository = carRepository;
         private readonly IRentalRepository _rentalRepository = rentalRepository;
-        private readonly IOutputPortStandard<GetRentStatusOutput> _outputPort = outputPort;
+        private readonly IOutputPortStandard<GetAvailableCarsOutput> _outputPort = outputPort;
 
         /// <inheritdoc/>
-        public async Task Execute(GetRentStatusInput input)
+        public async Task Execute(GetAvailableCarsInput input)
         {
             ArgumentNullException.ThrowIfNull(input);
 
@@ -36,19 +35,20 @@ namespace GtMotive.Estimate.Microservice.ApplicationCore.UseCases.GetRentStatus
             var rentedCarIds = await _rentalRepository.GetActiveRentedCarIdsAsync();
             var rentedSet = new HashSet<string>(rentedCarIds, StringComparer.Ordinal);
 
-            var carsWithStatus = allCars
-                .Select(car => new CarRentStatusOutputItem
+            var availableCars = allCars
+                .Where(car => !rentedSet.Contains(car.Id))
+                .Select(car => new AvailableCarOutputItem
                 {
                     Id = car.Id,
                     PlateNumber = car.PlateNumber,
                     Model = car.Model,
                     DateOfManufacture = car.DateOfManufacture,
                     KilometersRun = car.KilometersRun,
-                    RentStatus = rentedSet.Contains(car.Id) ? RentedStatus : AvailableStatus,
+                    RentStatus = AvailableStatus,
                 })
                 .ToList();
 
-            _outputPort.StandardHandle(new GetRentStatusOutput { Cars = carsWithStatus });
+            _outputPort.StandardHandle(new GetAvailableCarsOutput { Cars = availableCars });
         }
     }
 }

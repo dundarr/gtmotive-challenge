@@ -14,10 +14,10 @@ namespace GtMotive.Estimate.Microservice.Domain.Interfaces
     public interface IRentalRepository
     {
         /// <summary>
-        /// Gets the list of fleet identifiers that are currently rented (have an active rental).
+        /// Gets the list of car identifiers that are currently rented (have an active rental).
         /// </summary>
-        /// <returns>The list of rented fleet ids.</returns>
-        Task<IReadOnlyList<string>> GetActiveRentedFleetIdsAsync();
+        /// <returns>The list of rented car ids.</returns>
+        Task<IReadOnlyList<string>> GetActiveRentedCarIdsAsync();
 
         /// <summary>
         /// Adds a new rental.
@@ -34,11 +34,11 @@ namespace GtMotive.Estimate.Microservice.Domain.Interfaces
         Task<Rental> GetActiveByUserIdAsync(string userId);
 
         /// <summary>
-        /// Gets the active (not returned) rental for the given fleet vehicle, if any.
+        /// Gets the active (not returned) rental for the given car, if any.
         /// </summary>
-        /// <param name="fleetId">The fleet identifier.</param>
+        /// <param name="carId">The car identifier.</param>
         /// <returns>The active rental or null.</returns>
-        Task<Rental> GetActiveByFleetIdAsync(string fleetId);
+        Task<Rental> GetActiveByCarIdAsync(string carId);
 
         /// <summary>
         /// Updates an existing rental.

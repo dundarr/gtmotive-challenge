@@ -5,9 +5,9 @@ using MongoDB.Bson.Serialization.Attributes;
 namespace GtMotive.Estimate.Microservice.Infrastructure.MongoDb.Documents
 {
     /// <summary>
-    /// MongoDB document for a rental.
+    /// MongoDB document for a car.
     /// </summary>
-    public class RentalDocument
+    public class CarDocument
     {
         /// <summary>
         /// Gets or sets the identifier.
@@ -17,23 +17,23 @@ namespace GtMotive.Estimate.Microservice.Infrastructure.MongoDb.Documents
         public string Id { get; set; }
 
         /// <summary>
-        /// Gets or sets the user/person identifier.
+        /// Gets or sets the plate number.
         /// </summary>
-        public string UserId { get; set; }
+        public string PlateNumber { get; set; }
 
         /// <summary>
-        /// Gets or sets the car identifier.
+        /// Gets or sets the model.
         /// </summary>
-        public string CarId { get; set; }
+        public string Model { get; set; }
 
         /// <summary>
-        /// Gets or sets the date and time when the car was rented.
+        /// Gets or sets the date of manufacture.
         /// </summary>
-        public DateTime RentedAt { get; set; }
+        public DateTime DateOfManufacture { get; set; }
 
         /// <summary>
-        /// Gets or sets the date and time when the car was returned; null if still rented.
+        /// Gets or sets the kilometers run.
         /// </summary>
-        public DateTime? ReturnedAt { get; set; }
+        public int KilometersRun { get; set; }
     }
 }

@@ -11,9 +11,9 @@ namespace GtMotive.Estimate.Microservice.FunctionalTests.Infrastructure
         private readonly List<Rental> _rentals =
             [];
 
-        public Task<IReadOnlyList<string>> GetActiveRentedFleetIdsAsync()
+        public Task<IReadOnlyList<string>> GetActiveRentedCarIdsAsync()
         {
-            var ids = _rentals.Where(r => r.ReturnedAt == null).Select(r => r.FleetId).Distinct().ToList();
+            var ids = _rentals.Where(r => r.ReturnedAt == null).Select(r => r.CarId).Distinct().ToList();
             return Task.FromResult<IReadOnlyList<string>>(ids);
         }
 
@@ -30,9 +30,9 @@ namespace GtMotive.Estimate.Microservice.FunctionalTests.Infrastructure
             return Task.FromResult(rental);
         }
 
-        public Task<Rental> GetActiveByFleetIdAsync(string fleetId)
+        public Task<Rental> GetActiveByCarIdAsync(string carId)
         {
-            var rental = _rentals.Find(r => r.FleetId == fleetId && r.ReturnedAt == null);
+            var rental = _rentals.Find(r => r.CarId == carId && r.ReturnedAt == null);
             return Task.FromResult(rental);
         }
 

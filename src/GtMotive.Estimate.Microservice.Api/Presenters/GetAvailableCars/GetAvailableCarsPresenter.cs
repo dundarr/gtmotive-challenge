@@ -3,22 +3,22 @@ using System.Linq;
 using GtMotive.Estimate.Microservice.Api.Models;
 using GtMotive.Estimate.Microservice.Api.UseCases;
 using GtMotive.Estimate.Microservice.ApplicationCore.UseCases;
-using GtMotive.Estimate.Microservice.ApplicationCore.UseCases.GetRentStatus;
+using GtMotive.Estimate.Microservice.ApplicationCore.UseCases.GetAvailableCars;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
-namespace GtMotive.Estimate.Microservice.Api.Presenters.GetRentStatus
+namespace GtMotive.Estimate.Microservice.Api.Presenters.GetAvailableCars
 {
     /// <summary>
-    /// Presenter for the GetRentStatus use case output.
+    /// Presenter for the GetAvailableCars use case output.
     /// </summary>
-    public class GetRentStatusPresenter : IWebApiPresenter, IOutputPortStandard<GetRentStatusOutput>
+    public class GetAvailableCarsPresenter : IWebApiPresenter, IOutputPortStandard<GetAvailableCarsOutput>
     {
         /// <inheritdoc/>
         public IActionResult ActionResult { get; private set; }
 
         /// <inheritdoc/>
-        public void StandardHandle(GetRentStatusOutput response)
+        public void StandardHandle(GetAvailableCarsOutput response)
         {
             ArgumentNullException.ThrowIfNull(response);
 

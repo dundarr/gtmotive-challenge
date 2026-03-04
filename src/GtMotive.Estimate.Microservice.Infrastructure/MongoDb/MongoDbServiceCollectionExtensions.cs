@@ -12,7 +12,7 @@ namespace GtMotive.Estimate.Microservice.Infrastructure.MongoDb
     public static class MongoDbServiceCollectionExtensions
     {
         /// <summary>
-        /// Registers MongoService, FleetRepository and UnitOfWork with the container.
+        /// Registers MongoService, CarRepository and UnitOfWork with the container.
         /// </summary>
         /// <param name="builder">Instance returned by AddBaseInfrastructure.</param>
         /// <returns>The same builder for chaining.</returns>
@@ -22,7 +22,7 @@ namespace GtMotive.Estimate.Microservice.Infrastructure.MongoDb
 
             builder.Services.AddSingleton<MongoService>();
             builder.Services.AddScoped<IUnitOfWork, MongoUnitOfWork>();
-            builder.Services.AddScoped<IFleetRepository, FleetRepository>();
+            builder.Services.AddScoped<ICarRepository, CarRepository>();
             builder.Services.AddScoped<IRentalRepository, RentalRepository>();
 
             return builder;

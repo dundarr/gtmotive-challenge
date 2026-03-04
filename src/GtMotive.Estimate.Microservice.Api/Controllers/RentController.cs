@@ -1,10 +1,10 @@
-﻿using System;
+using System;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using GtMotive.Estimate.Microservice.Api.Models;
-using GtMotive.Estimate.Microservice.Api.Presenters.RentFleet;
+using GtMotive.Estimate.Microservice.Api.Presenters.RentCar;
 using GtMotive.Estimate.Microservice.ApplicationCore.UseCases;
-using GtMotive.Estimate.Microservice.ApplicationCore.UseCases.RentFleet;
+using GtMotive.Estimate.Microservice.ApplicationCore.UseCases.RentCar;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -12,34 +12,34 @@ using Microsoft.AspNetCore.Mvc;
 namespace GtMotive.Estimate.Microservice.Api.Controllers
 {
     /// <summary>
-    /// Controller for renting a fleet vehicle.
+    /// Controller for renting a car.
     /// </summary>
     /// <remarks>
     /// Initializes a new instance of the <see cref="RentController"/> class.
     /// </remarks>
-    /// <param name="rentFleetUseCase">The rent fleet use case.</param>
-    /// <param name="rentFleetPresenter">The rent fleet presenter.</param>
+    /// <param name="rentCarUseCase">The rent car use case.</param>
+    /// <param name="rentCarPresenter">The rent car presenter.</param>
     [ApiController]
     [Route("api/[controller]")]
     [Authorize]
     public class RentController(
-        IUseCase<RentFleetInput> rentFleetUseCase,
-        RentFleetPresenter rentFleetPresenter) : ControllerBase
+        IUseCase<RentCarInput> rentCarUseCase,
+        RentCarPresenter rentCarPresenter) : ControllerBase
     {
-        private readonly IUseCase<RentFleetInput> _rentFleetUseCase = rentFleetUseCase;
-        private readonly RentFleetPresenter _rentFleetPresenter = rentFleetPresenter;
+        private readonly IUseCase<RentCarInput> _rentCarUseCase = rentCarUseCase;
+        private readonly RentCarPresenter _rentCarPresenter = rentCarPresenter;
 
         /// <summary>
-        /// Rents a fleet vehicle. Only one fleet vehicle per person is allowed. User id is taken from the JWT token.
+        /// Rents a car. Only one car per person is allowed. User id is taken from the JWT token.
         /// If the user already has an active rental, returns 400 with message "Not allowed more than 1 rental".
         /// </summary>
-        /// <param name="request">The rent request containing the fleet id.</param>
-        /// <returns>201 Created with the rental id, or 400 if already renting, or 404 if fleet not found.</returns>
+        /// <param name="request">The rent request containing the car id.</param>
+        /// <returns>201 Created with the rental id, or 400 if already renting, or 404 if car not found.</returns>
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> RentFleet([FromBody] RentFleetRequest request)
+        public async Task<IActionResult> RentCar([FromBody] RentCarRequest request)
         {
             ArgumentNullException.ThrowIfNull(request);
 
@@ -54,15 +54,15 @@ namespace GtMotive.Estimate.Microservice.Api.Controllers
                 });
             }
 
-            var input = new RentFleetInput
+            var input = new RentCarInput
             {
                 UserId = userId,
-                FleetId = request.FleetId,
+                CarId = request.CarId,
             };
 
-            await _rentFleetUseCase.Execute(input);
+            await _rentCarUseCase.Execute(input);
 
-            return _rentFleetPresenter.ActionResult;
+            return _rentCarPresenter.ActionResult;
         }
 
         /// <summary>

@@ -109,8 +109,8 @@ namespace GtMotive.Estimate.Microservice.FunctionalTests.Infrastructure
             services.AddLogging();
             services.AddBaseInfrastructure(true);
             services.AddScoped<GtMotive.Estimate.Microservice.Domain.Interfaces.IUnitOfWork, InMemoryUnitOfWork>();
-            services.AddSingleton<InMemoryFleetRepository>();
-            services.AddScoped<GtMotive.Estimate.Microservice.Domain.Interfaces.IFleetRepository>(sp => sp.GetRequiredService<InMemoryFleetRepository>());
+            services.AddSingleton<InMemoryCarRepository>();
+            services.AddScoped<GtMotive.Estimate.Microservice.Domain.Interfaces.ICarRepository>(sp => sp.GetRequiredService<InMemoryCarRepository>());
             services.AddSingleton<InMemoryRentalRepository>();
             services.AddScoped<GtMotive.Estimate.Microservice.Domain.Interfaces.IRentalRepository>(sp => sp.GetRequiredService<InMemoryRentalRepository>());
         }

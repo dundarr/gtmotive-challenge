@@ -7,7 +7,7 @@ using System;
 namespace GtMotive.Estimate.Microservice.Domain.Entities
 {
     /// <summary>
-    /// Represents a fleet rental in the domain.
+    /// Represents a car rental in the domain.
     /// </summary>
     public class Rental
     {
@@ -22,17 +22,17 @@ namespace GtMotive.Estimate.Microservice.Domain.Entities
         public string UserId { get; set; }
 
         /// <summary>
-        /// Gets or sets the rented fleet vehicle identifier.
+        /// Gets or sets the rented car identifier.
         /// </summary>
-        public string FleetId { get; set; }
+        public string CarId { get; set; }
 
         /// <summary>
-        /// Gets or sets the date and time when the fleet vehicle was rented.
+        /// Gets or sets the date and time when the car was rented.
         /// </summary>
         public DateTime RentedAt { get; set; }
 
         /// <summary>
-        /// Gets or sets the date and time when the fleet vehicle was returned; null if still rented.
+        /// Gets or sets the date and time when the car was returned; null if still rented.
         /// </summary>
         public DateTime? ReturnedAt { get; set; }
     }
