@@ -25,6 +25,11 @@ namespace GtMotive.Estimate.Microservice.Host.DependencyInjection
             services.AddSwaggerGen(
                 options =>
                 {
+                    options.MapType<DateOnly>(() => new OpenApiSchema
+                    {
+                        Type = "string",
+                        Format = "date",
+                    });
                     options.CustomSchemaIds(type => type.ToString());
                     options.SwaggerDoc($"v{AssemblyVersion}", new OpenApiInfo
                     {

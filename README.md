@@ -1,4 +1,126 @@
 # Sample Implementation of Hexagonal Architecture in a Microservice
+
+## Quick start — Launch instructions
+
+### Executing from Visual Studio
+
+The API depends on **MongoDB**. When running from Visual Studio you must have MongoDB available (e.g. in Docker).
+
+1. **Start MongoDB** (e.g. with Docker):
+
+   ```bash
+   docker run -d --name mongodb -p 27017:27017 -e MONGO_INITDB_ROOT_USERNAME=admin -e MONGO_INITDB_ROOT_PASSWORD=admin mongo:7
+   ```
+
+   Development settings expect: `mongodb://admin:admin@localhost:27017` (see `src/GtMotive.Estimate.Microservice.Host/appsettings.Development.json`).
+
+2. **Run the application** in either way:
+
+   - **Host (recommended for local dev)**  
+     Set **GtMotive.Estimate.Microservice.Host** as the startup project and run (F5 or Run). The API will listen on `https://localhost:14602` and Swagger at `https://localhost:14602/swagger`.
+
+   - **Docker**  
+     In the Host project, select the **Docker** launch profile and run. The app runs in a container and still uses the MongoDB connection (use the same `docker run` above so MongoDB is on `localhost:27017` from the host, or adjust connection string for your setup).
+
+### Executing with Docker Compose
+
+From the **repository root**:
+
+```bash
+docker compose up
+```
+
+This starts:
+
+- **MongoDB** (port 27017, user `admin` / password `admin`)
+- **estimate-api** (port 14602)
+
+API base URL: `http://localhost:14602`. Swagger: `http://localhost:14602/swagger`.
+
+To run in the background:
+
+```bash
+docker compose up -d
+```
+
+### Optional: Seed sample data (Development only)
+
+To quickly load sample cars and one rental for local testing or review, call the dev seed endpoint (only available when running in Development):
+
+- **POST** `/api/dev/seed`
+
+Example with curl (from repository root, API on port 14602):
+
+```bash
+curl -X POST http://localhost:14602/api/dev/seed
+```
+
+The endpoint is idempotent: if data already exists, it returns a message and does not duplicate data. It creates three sample cars and one active rental so you can try **Get cars**, **Get available cars**, **Rent status**, and the rent/return flow from Swagger without creating data manually.
+
+---
+
+## Explanation of the code added (Car rental microservice)
+
+This solution extends the hexagonal architecture sample with a **car rental** domain: manage a fleet of cars and their rental/return lifecycle.
+
+### Domain
+
+- **`Car`** entity: `Id`, `PlateNumber`, `Model`, `DateOfManufacture`, `KilometersRun`.
+- **`Rental`** entity: represents an active or past rental (links vehicle to customer and dates).
+- **`ICarRepository`**: port for car persistence (get by id, list, add, etc.).
+- **`IRentalRepository`**: port for rental persistence (create rental, return rental, find active rentals, etc.).
+
+### Application (use cases)
+
+- **CreateCar**: register a new car in the fleet.
+- **GetCars**: list all cars.
+- **GetAvailableCars**: list cars that are not currently rented.
+- **RentCar**: create a rental for a given car (and customer/date info).
+- **ReturnCar**: end a rental (return the car).
+- **GetRentStatus**: returns rent status for cars (e.g. available vs rented), used by the API to expose status in list endpoints.
+
+Inputs/Outputs and presenters follow the same request/response and output-port pattern as the rest of the template.
+
+### API (user interface)
+
+- **`CarController`** (`/api/car`): REST endpoints for create, get all, get available, rent, return, and rent status, using MediatR, presenters, and the use cases above.
+- **Models**: e.g. `CreateCarRequest`, `RentCarRequest`, `CarResponse`, `AvailableCarResponse`.
+- **Presenters**: one per use case (CreateCar, GetCars, GetAvailableCars, RentCar, ReturnCar, GetRentStatus) to map use-case outputs to HTTP results and view models.
+
+### Infrastructure
+
+- **MongoDB**: `CarDocument` and `RentalDocument` for persistence; **CarRepository** and **RentalRepository** implement the domain ports. MongoDB is configured via `MongoDbSettings` (connection string and database name).
+
+### Tests
+
+- **Unit**: e.g. `RentCarUseCaseSpec` for the RentCar use case.
+- **Functional**: in-memory implementations of `ICarRepository` and `IRentalRepository` for integration tests; **GetCarsIntegrationSpec** and similar specs for the API.
+
+The same hexagonal layering is used: Domain has no external dependencies; Application defines ports and use cases; API and Infrastructure are adapters (controllers/presenters and MongoDB).
+
+### Local auth URL and settings
+
+For development and Swagger, the API can use a **local auth emulator** instead of the external identity server. That way you can call protected endpoints from Swagger without depending on an external authority (e.g. `identity.mygtmotive.com`).
+
+**Settings (under `AppSettings` and `Jwt`):**
+
+| Setting | Description |
+|--------|-------------|
+| **`UseLocalAuth`** | When `true`, the API validates JWTs with a symmetric key and local issuer instead of the external `JwtAuthority`. Use only in Development; set to `false` in other environments. |
+| **`LocalAuthTokenUrl`** | Full URL of the local token endpoint (e.g. `https://localhost:14602/connect/token`). Must match the host and port where the API runs. Used by Swagger UI as the OAuth2 token URL when `UseLocalAuth` is true. |
+| **`Jwt:Key`** | Symmetric key used to sign and validate tokens. Required when `UseLocalAuth` is true. For development only; never use in production. |
+| **`Jwt:Issuer`** | Issuer claim for the JWT (e.g. `renting-api`). Required when `UseLocalAuth` is true. |
+| **`Jwt:TestUserId`** | Optional. Value used as the `sub` claim in the local token (default e.g. `user-test-001`). |
+
+**Behaviour:**
+
+- When `UseLocalAuth` is true, `LocalAuthController` exposes `POST /connect/token` and issues JWTs using the configured `Jwt:Key` and `Jwt:Issuer`. Swagger is configured to use **client_credentials** with this URL; use client_id `client-gtestimate-swagger` and client_secret `gtmotive` for “Authorize” in Swagger.
+- When `UseLocalAuth` is false, the API uses the external `JwtAuthority` for token validation and Swagger points to that authority’s token URL.
+
+In Docker Compose, set `AppSettings__LocalAuthTokenUrl` to the URL where the API is reachable (e.g. `http://localhost:14602/connect/token` if you call Swagger from the host).
+
+---
+
 ## Index
 ### [Introduction](#introduction)
 ### [Clean Architecture](#clean-architecture)
